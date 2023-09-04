@@ -1,6 +1,6 @@
 # Project Description
 
-This is a web app which I build for my <h1>NextJs</h1> practice and also I have used <h1>typescript with Redux Toolkit</h1> for practice in this project
+This is a web app which I build for my <strong>NextJs</strong> practice and also I have used <strong>typescript with Redux Toolkit</strong> for practice in this project
 
 ## Under Development
 
