@@ -1,14 +1,4 @@
-export type UserTypes = {
-  createdAt: string;
-  email: string;
-  isAdmin: boolean;
-  isVerified: boolean;
-  name: string;
-  password: string;
-  updatedAt: string;
-  __v: number;
-  _id: string;
-};
+import { UserTypes } from "@/Redux/Features/userSlice";
 
 export const addUserToLocalStorage = (user: UserTypes) => {
   localStorage.setItem("user", JSON.stringify(user));
