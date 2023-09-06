@@ -1,4 +1,4 @@
-import { connectDB, signToken } from "@/utils/config";
+import { connectDB, signToken } from "@/app/utils/config";
 import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -16,13 +16,16 @@ export async function POST(req: NextRequest) {
     }
     const { _id, name, isVerified, isAdmin } = user;
 
-    const token = signToken({ _id, name, email, isVerified, isAdmin });
+    const token = await signToken({ _id, name, email, isVerified, isAdmin });
 
-    return NextResponse.json({
-      message: "Logged In successfully",
-      data: user,
-      token: token,
-    });
+    const response = NextResponse.json(
+      { message: "hello", data: user },
+      { status: 200 }
+    );
+
+    response.cookies.set("token", token);
+
+    return response;
   } catch (error) {
     console.log(error);
   }

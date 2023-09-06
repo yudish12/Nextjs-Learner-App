@@ -1,6 +1,6 @@
-import { connectDB } from "@/utils/config";
+import { connectDB } from "@/app/utils/config";
 import User from "@/models/userModel";
-import { signToken } from "@/utils/config";
+import { signToken } from "@/app/utils/config";
 import { NextRequest, NextResponse } from "next/server";
 
 connectDB();
@@ -23,11 +23,16 @@ export async function POST(req: NextRequest) {
     });
     await userData.save();
 
-    const token = signToken(userData);
-    return NextResponse.json(
-      { message: "hello", data: userData, token: token },
+    const token = await signToken(userData);
+
+    const response = NextResponse.json(
+      { message: "hello", data: userData },
       { status: 200 }
     );
+
+    response.cookies.set("token", token);
+
+    return response;
   } catch (error: any) {
     return NextResponse.json(
       { message: "Hello from Next.js!" },

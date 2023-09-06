@@ -1,7 +1,9 @@
+"use client";
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import img from "../../public/next.svg";
+import Navright from "./Navright";
+import ReduxProvider from "./Provider";
 
 const Navbar = () => {
   return (
@@ -16,14 +18,9 @@ const Navbar = () => {
         />
       </div>
       <div className="right flex justify-around gap-4">
-        <Link href={"/login"}>
-          <span className="bg-white text-black p-2 px-6 rounded-lg">Login</span>
-        </Link>
-        <Link href={"/signup"}>
-          <span className="bg-white text-black p-2 px-6 rounded-lg">
-            Signup
-          </span>
-        </Link>
+        <ReduxProvider>
+          <Navright />
+        </ReduxProvider>
       </div>
     </nav>
   );

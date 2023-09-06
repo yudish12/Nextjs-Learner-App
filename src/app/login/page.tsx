@@ -1,44 +1,42 @@
 "use client";
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading";
-import {
-  addTokenToLocalStorage,
-  addUserToLocalStorage,
-} from "@/utils/localstorage";
+import { userLogin } from "@/Redux/Features/userSlice";
+import { useAppSelector, useAppDispatch } from "../hooks/TypedHooks";
 
 const Loginpage = () => {
-  const [user, setUser] = useState({
+  const [User, setUser] = useState({
     email: "",
     password: "",
   });
 
-  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const { isLoading, user, error } = useAppSelector((state) => state.user);
 
   const router = useRouter();
 
   const handleChange = (e: any) => {
     const name = e.target.name;
     const value = e.target.value;
-    setUser({ ...user, [name]: value });
+    setUser({ ...User, [name]: value });
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const resp = await axios.post("/api/user/login", user);
-      addUserToLocalStorage(resp.data.data);
-      addTokenToLocalStorage(resp.data.token);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-      router.push("/profile");
-    }
+    dispatch(userLogin(User));
   };
+
+  useEffect(() => {
+    console.log(user);
+    if (error) {
+      alert("error occured Retry");
+      return;
+    }
+    if (user && !isLoading) router.push(`/profile/${user._id}`);
+  }, [user, error, router]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
@@ -50,7 +48,7 @@ const Loginpage = () => {
           <input
             id="email"
             name="email"
-            value={user.email}
+            value={User.email}
             placeholder="Enter your email"
             className="text-black placeholder:text-gray-600 rounded-sm px-3 py-1"
             onChange={handleChange}
@@ -63,7 +61,7 @@ const Loginpage = () => {
             id="password"
             name="password"
             className="text-black placeholder:text-gray-600 rounded-sm px-3 py-1"
-            value={user.password}
+            value={User.password}
             placeholder="Enter your password"
             onChange={handleChange}
             type="password"
@@ -73,7 +71,7 @@ const Loginpage = () => {
           type="submit"
           className="my-2 bg-black text-white p-2 px-6 rounded-lg w-2/3 mx-auto border-2 border-white"
         >
-          {loading ? <Loading /> : "Login"}
+          {isLoading ? <Loading /> : "Login"}
         </button>
         <Link className="text-center" href={"/signup"}>
           <span className="text-center my-2">Visit Signup Page</span>
