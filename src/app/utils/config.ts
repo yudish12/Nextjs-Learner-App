@@ -53,3 +53,8 @@ export const checkToken = async (token: string) => {
     }
   });
 };
+
+export const convertDate = (date: string) => {
+  const d = new Date(date);
+  return d.toDateString();
+};

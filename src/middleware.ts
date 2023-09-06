@@ -5,7 +5,7 @@ export async function middleware(req: NextRequest) {
   let token: string | undefined;
   token = req.cookies.get("token")?.value;
   if (!token) {
-    return NextResponse.redirect(new URL("/home", req.url));
+    return NextResponse.redirect(new URL("/", req.url));
   }
   await checkToken(token);
 }
